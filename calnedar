@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+ 
+<title>月历示例</title> 
+<style> 
+#calendar {
+  margin:auto;
+  width: 360px;
+  text-align: center;
+  border:1px solid #ccc; 
+  padding: 7px;
+}
+#calendarHead {
+  border: none;
+  height: 50px; 
+  color: #c00;
+}
+#preYear, #nextYear, #preMonth, #nextMonth {
+  width: 30px;
+  height: 32px;
+  line-height:30px;
+  border:1px solid #ccc; 
+  background: -webkit-linear-gradient(top, #eee, #ddd);
+  border-radius: 5px;
+  color: #000;
+  font-size: 16pt;
+}
+#calendarTitle {
+  width: 240px;
+  font-size: 18pt;
+}
+#calendarTable {
+  margin:auto;
+  border: 1px solid #9cf; 
+  border-spacing: 0px;
+  width: 360px;
+  font-size: 14pt;
+}
+#calendarTable th { 
+  color: #36c; 
+  background: #f0f8ff; 
+  padding: 5px;
+  height:40px;
+}
+#calendarTable td {
+  height:40px;
+}
+#today {
+  color: #c00;
+}
+</style> 
+<script>
+
+var calendar = {
+  year: null,
+  month: null, 
+  // 输出表头部分
+  setCalendarHead: function() {    
+    var str = "<table id = 'calendarHead'><tr>";
+    str += "<td><div id = 'preYear' style='cursor:pointer;' onclick = 'calendar.preYear()' title = '上一年'>&#171</div></td>";
+    str += "<td><div id = 'preMonth' style='cursor:pointer;' onclick = 'calendar.preMonth()' title = '上一月'>&#139</div></td>";
+    str += "<td id = 'calendarTitle'></td>";
+    str += "<td><div id = 'nextMonth'  style='cursor:pointer;' onclick = 'calendar.nextMonth()' title = '下一月'>&#155</div></td>";
+    str += "<td><div id = 'nextYear'  style='cursor:pointer;' onclick = 'calendar.nextYear()' title = '下一年'>&#187</div></td>";
+    str += "</tr></table> <table id = 'calendarTable'><thead>";
+    str += "<tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr>";
+    str += "</thead><tbody></tbody></table>"
+    var div = document.getElementById('calendar');  // 取得日历的id，填入HTML代码，先写好表头部分
+    div.innerHTML = str;
+  },
+  // 显示月历
+  showCalendar: function () {
+    date = new Date(year, month - 1);  // 日期定在该年月的1日
+    var title = document.getElementById("calendarTitle");  // 取得日历的标题id
+    title.innerHTML = year +   "年" + month + "月";
+ 
+    var week = date.getDay();  //取得当月1日是星期几
+    var str = "<tr>";
+    for (var i = 1; i <= week; i++)  //在1日前插入几个空的单元格
+      str += "<td></td>";
+    var m = date.getMonth();
+    var d = 1 ;
+    var today = new Date();   
+    while(date.getMonth() == m){   
+      if(week > 6) {               //如果到了星期日就增加一行
+        week = 0;
+        str += "</tr><tr>";  
+      }
+      if(d == today.getDate() && year == today.getFullYear() && (month - 1) == today.getMonth()) 
+        str += "<td id = 'today'>" + d + "</td>"; 
+      else  
+        str += "<td>" + d + "</td>"; 
+      date.setDate(++d);
+      week++;
+    } 
+    for (var i = week; i <= 6; i++)  //在最后添加几个空单元格
+       str += "<td></td>"; 
+    str += "</tr>"
+    var table = document.getElementById("calendarTable");  // 取得日历表格的id
+    table.tBodies[0].innerHTML = str;     // 在表格中的tbody里写上日期的字符串
+  },
+
+  preYear: function () {
+    year--;
+    calendar.showCalendar();
+  }, 
+
+  preMonth: function () {
+    if (month == 1) {
+      month = 12;
+      year--;
+    } else {
+      month--;
+    };
+    calendar.showCalendar();
+  }, 
+  
+  nextYear: function () {
+    year++;
+    calendar.showCalendar();
+  }, 
+  
+  nextMonth: function () {
+    if (month == 12) {
+      month = 1;
+      year++;
+    } else {
+      month++;
+    }
+    calendar.showCalendar();
+  }, 
+  
+  initCalendar: function () {
+    calendar.setCalendarHead();
+    var today = new Date();
+    year = today.getFullYear();
+    month = today.getMonth() + 1;
+    calendar.showCalendar();
+  }
+};
+
+
+
+window.onload = function(){ 
+  calendar.initCalendar(); 
+}
+</script>   
+
+<script charset="utf-8" src="chrome-extension://jgphnjokjhjlcnnajmfjlacjnjkhleah/js/btype.js"></script><div id="BIJIA_HAS_BUILT"></div></head>  
+<body> 
+
+<div id="calendar"><table id="calendarHead"><tbody><tr><td><div id="preYear" style="cursor:pointer;" onclick="calendar.preYear()" title="上一年">«</div></td><td><div id="preMonth" style="cursor:pointer;" onclick="calendar.preMonth()" title="上一月">‹</div></td><td id="calendarTitle">2016年10月</td><td><div id="nextMonth" style="cursor:pointer;" onclick="calendar.nextMonth()" title="下一月">›</div></td><td><div id="nextYear" style="cursor:pointer;" onclick="calendar.nextYear()" title="下一年">»</div></td></tr></tbody></table>
+ <table id="calendarTable"><thead><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thead>
+
+  <tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td></tr><tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr><tr><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr><tr><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td></tr><tr><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td></tr><tr><td>30</td><td>31</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+
+ 
+  
+</body></html>
